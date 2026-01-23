@@ -19,6 +19,7 @@ meta_config: Meta
 
 get_bearer_token = HTTPBearer(auto_error=False)
 allowed_tokens: List[str] = None
+model_alias: str = None
 
 
 def get_allowed_tokens() -> List[str] | None:
@@ -40,8 +41,10 @@ async def lifespan(app: FastAPI):
     global vec
     global meta_config
     global allowed_tokens
+    global model_alias
 
     allowed_tokens = get_allowed_tokens()
+    model_alias = os.getenv("ALIAS_MODEL_NAME")
     model_path = "./models"
 
     meta_config = Meta(model_path)
@@ -77,12 +80,17 @@ def get_available_model():
     if not model_name:
         config = meta_config.get()
         model_name = config.get("model_path", "minishlab/potion-base-8M")
-    
+
     # Extract just the model name if it's a path
     if "/" in model_name and not model_name.startswith("minishlab/"):
         return "minishlab/potion-base-8M"
     else:
         return model_name
+
+
+def get_model_alias():
+    """Get the model alias for embedding requests, or None if not set"""
+    return model_alias
 
 
 @app.get("/v1/models")
@@ -127,7 +135,10 @@ async def embed(item: VectorInput,
         try:
             # Validate model parameter
             available_model = get_available_model()
-            if item.model != available_model:
+            model_alias = get_model_alias()
+
+            # Accept either real model name or alias
+            if item.model != available_model and item.model != model_alias:
                 response.status_code = status.HTTP_400_BAD_REQUEST
                 return {"error": f"Model '{item.model}' not found. Available model: '{available_model}'"}
             

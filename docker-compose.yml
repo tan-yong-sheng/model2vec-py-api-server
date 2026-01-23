@@ -8,11 +8,15 @@ services:
     image: model2vec-potion-base-8m
     environment:
       - MODEL_NAME=${MODEL_NAME:-minishlab/potion-base-8M}
+      - ALIAS_MODEL_NAME=${ALIAS_MODEL_NAME}
     ports:
       - "8012:8080"
     networks:
       - proxy
+      - internal
 
 networks:
   proxy:
+    external: true
+  internal:
     external: true
