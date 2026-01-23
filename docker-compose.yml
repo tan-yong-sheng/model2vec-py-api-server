@@ -1,6 +1,5 @@
 services:
-  model2vec-potion-base-8m:
-    container_name: model2vec-potion-base-8m
+  model2vec:
     build:
       context: .
       dockerfile: Dockerfile
