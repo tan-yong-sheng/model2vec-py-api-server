@@ -102,20 +102,35 @@ async def list_models(
     if is_authorized(auth):
         try:
             model_display_name = get_available_model()
-            
+            model_alias = get_model_alias()
+
+            models = [
+                {
+                    "id": model_display_name,
+                    "object": "model",
+                    "created": 1700000000,
+                    "owned_by": "minishlab",
+                    "permission": [],
+                    "root": model_display_name,
+                    "parent": None
+                }
+            ]
+
+            # Add alias as a separate model if set
+            if model_alias and model_alias != model_display_name:
+                models.append({
+                    "id": model_alias,
+                    "object": "model",
+                    "created": 1700000000,
+                    "owned_by": "minishlab",
+                    "permission": [],
+                    "root": model_alias,
+                    "parent": model_display_name
+                })
+
             return {
                 "object": "list",
-                "data": [
-                    {
-                        "id": model_display_name,
-                        "object": "model",
-                        "created": 1700000000,  # Static timestamp
-                        "owned_by": "minishlab",
-                        "permission": [],
-                        "root": model_display_name,
-                        "parent": None
-                    }
-                ]
+                "data": models
             }
         except Exception as e:
             logger.exception("Something went wrong while listing models.")
