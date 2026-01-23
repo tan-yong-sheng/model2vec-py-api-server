@@ -1,10 +1,19 @@
 {
   "permissions": {
     "allow": [
-      "mcp__tavily-mcp__tavily_search",
-      "mcp__tavily-mcp__tavily_extract"
-    ],
-    "deny": [],
-    "ask": []
-  }
+      "Skill",
+      "Bash",
+      "WebSearch",
+      "WebFetch",
+      "Read",
+      "Edit",
+      "Write",
+      "Update",
+      "mcp__chrome-devtools",
+      "mcp__ai-vision-mcp",
+      "mcp__plugin:context7:context7",
+      "mcp__web-search-scrape"
+    ]
+  },
+  "enabledPlugins": {}
 }
