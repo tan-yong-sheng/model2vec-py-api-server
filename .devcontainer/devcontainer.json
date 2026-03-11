@@ -1,0 +1,26 @@
+{
+    "name": "python-ai-devcontainer",
+    "image": "mcr.microsoft.com/devcontainers/python:3.13-bookworm",
+    "features": {
+        "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},
+        "ghcr.io/devcontainers/features/node:1": {
+            "version": "20"
+        }
+    },
+    "postCreateCommand": "bash -i -c 'python3 -m pip install --upgrade pip modal && curl -fsSL https://claude.ai/install.sh | bash && CODEX_VERSION=$(curl -s https://api.github.com/repos/openai/codex/releases/latest | grep tag_name | cut -d\\\" -f4) && curl -fsSL https://github.com/openai/codex/releases/download/${CODEX_VERSION}/codex-x86_64-unknown-linux-musl.tar.gz | tar -xz && mv codex-x86_64-unknown-linux-musl ~/.local/bin/codex && chmod +x ~/.local/bin/codex && echo export PATH=$HOME/.local/bin:$PATH >> ~/.bashrc && echo export PATH=$HOME/.local/bin:$PATH >> ~/.profile'",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "ms-azuretools.vscode-docker",
+                "dbaeumer.vscode-eslint",
+                "Anthropic.claude-code"
+            ]
+        }
+    },
+    "mounts": [
+        "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+    ],
+    "remoteUser": "vscode"
+}

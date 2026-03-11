@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "env": {
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "claude-haiku-4-5",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "claude-haiku-4-5",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "claude-haiku-4-5",
+    "ANTHROPIC_MODEL": "claude-haiku-4-5",
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "ENABLE_TOOL_SEARCH": "false",
+    "MAX_THINKING_TOKENS": "10000",
+    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "70",
+    "MCP_TIMEOUT": "300000",
+    "MCP_TOOL_TIMEOUT": "300000",
+    "BASH_DEFAULT_TIMEOUT_MS": "1800000",
+    "BASH_MAX_TIMEOUT_MS": "7200000"
+  },
+  "model": "claude-haiku-4-5",
+  "enabledPlugins": {
+    "context7@claude-plugins-official": true,
+    "cc-devkits@tan-yong-sheng-cc-devkits": true,
+    "everything-claude-code@everything-claude-code": true
+  },
+  "alwaysThinkingEnabled": false,
+  "autoUpdatesChannel": "latest",
+  "skipDangerousModePermissionPrompt": true,
+  "teammateMode": "tmux"
+}
