@@ -66,7 +66,7 @@ You could change the embeddings model from `minishlab/potion-base-8M` to other m
 
 You just need to copy `.env.example` to `.env`, and then change the `MODEL_NAME` value there.
 
-🧩 Modal Deployment (infra/modal)
+🧩 Deployment to Modal.com 
 ----------------------------------
 
 We include a simple Modal deployment setup in `infra/modal` with volume-cached model weights, optional auth, and a single ASGI app.
