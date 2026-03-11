@@ -5,6 +5,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 from typing import Optional
 from operator import attrgetter
+import os
 
 from cachetools import TTLCache, cachedmethod
 from cachetools.keys import hashkey
@@ -123,12 +124,30 @@ class Model2VecVectorizer:
     model: StaticModel
 
     def __init__(self, model_path: str, config: Config):
-        self.model = StaticModel.load_local(model_path)
+        self.model_path = model_path
+        self.model_name = config.model_name
+        self.model = self._load_model()
         self.config = config
         self.cache = TTLCache(
             maxsize=config.embedding_cache_max_entries,
             ttl=config.embedding_cache_ttl_secs,
         )
+
+    def _load_model(self) -> StaticModel:
+        if self.model_name:
+            try:
+                return StaticModel.from_pretrained(self.model_name, token=None)
+            except Exception as exc:
+                if os.path.exists(os.path.join(self.model_path, "config.json")):
+                    logger.warning(
+                        "Failed to load model '%s' from pretrained, falling back to local: %s",
+                        self.model_name,
+                        exc,
+                    )
+                    return StaticModel.load_local(self.model_path)
+                raise
+
+        return StaticModel.load_local(self.model_path)
 
     def _cache_key(self, text: str | list[str], config: Optional[VectorInputConfig]):
         if isinstance(text, list):
