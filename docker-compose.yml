@@ -1,19 +1,26 @@
 services:
   model2vec:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        MODEL_NAME: ${MODEL_NAME:-minishlab/potion-base-8M}
-    image: model2vec-potion-base-8m
-    environment:
-      - MODEL_NAME=${MODEL_NAME:-minishlab/potion-base-8M}
-      - ALIAS_MODEL_NAME=${ALIAS_MODEL_NAME:-minishlab-potion-base-8M}
+    image: ghcr.io/tys203831/model2vec-py-api-server:latest
     ports:
-      - "8012:8080"
-    networks:
-      - proxy
-
-networks:
-  proxy:
-    external: true
+      - "8080:8080"
+    environment:
+      MODEL_NAME: minishlab/potion-base-8M
+      ALIAS_MODEL_NAME: ""
+      REQUEST_TIMEOUT_SECS: "30"
+      REQUEST_BODY_LIMIT_BYTES: "2000000"
+      CONCURRENCY_LIMIT: "64"
+      MAX_INPUT_ITEMS: "512"
+      MAX_INPUT_CHARS: "8192"
+      MAX_TOTAL_CHARS: "200000"
+      LAZY_LOAD_MODEL: "false"
+      MODEL_UNLOAD_ENABLED: "false"
+      MODEL_UNLOAD_IDLE_TIMEOUT: "1800"
+      MODEL_LOAD_MAX_RETRIES: "5"
+      MODEL_LOAD_RETRY_BASE_MS: "200"
+      MODEL_LOAD_RETRY_MAX_MS: "5000"
+      MODEL_LOAD_TIMEOUT_SECS: "120"
+      INFERENCE_MAX_RETRIES: "2"
+      INFERENCE_RETRY_BASE_MS: "50"
+      INFERENCE_RETRY_MAX_MS: "500"
+      EMBEDDING_CACHE_MAX_ENTRIES: "1024"
+      EMBEDDING_CACHE_TTL_SECS: "600"

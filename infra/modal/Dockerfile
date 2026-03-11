@@ -18,7 +18,6 @@ RUN python download.py
 
 FROM base_image AS t2v_transformers
 
-# Add label for image metadata
 LABEL name="model2vec"
 
 WORKDIR /app
