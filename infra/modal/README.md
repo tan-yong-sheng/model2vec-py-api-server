@@ -1,4 +1,4 @@
-# Modal Deployment (Condensed Docs)
+# Modal Deployment
 
 This directory now contains **two docs**:
 
@@ -16,20 +16,3 @@ Key implementation file:
   `modal run infra/modal/modal_config.py::download_models`
 - Deploy the API:
   `modal deploy infra/modal/modal_config.py`
-
----
-
-## Why It Changed
-
-You requested fewer docs and a plan that is **cost-aware (<$30/month credit)** and aligned to:
-- Default model: `minishlab/potion-multilingual-128M`
-- Lower idle spend
-- Better cold start/cost trade-offs
-
----
-
-## Quick Start
-
-- Read: `PLAN.md`
-- Confirm: whether you want **single service** or **split metadata vs embeddings**
-- Proceed with Phase 1 in the plan
