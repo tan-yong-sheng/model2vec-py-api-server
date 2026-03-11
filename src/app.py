@@ -90,20 +90,38 @@ async def index():
     }
 
 
+async def _set_live_response(response: Response) -> None:
+    response.status_code = status.HTTP_200_OK
+
+
 @app.get("/.well-known/live", response_class=Response)
 async def live(response: Response):
-    response.status_code = status.HTTP_204_NO_CONTENT
+    await _set_live_response(response)
+
+
+@app.get("/.well_known/live", response_class=Response)
+async def live_underscore(response: Response):
+    await _set_live_response(response)
+
+
+async def _ready_response(response: Response):
+    if await app_state.is_ready():
+        response.status_code = status.HTTP_200_OK
+        return None
+    return JSONResponse(
+        status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+        content=ErrorResponse.server_error("Model not loaded").to_dict(),
+    )
 
 
 @app.get("/.well-known/ready", response_class=Response)
 async def ready(response: Response):
-    if await app_state.is_ready():
-        response.status_code = status.HTTP_204_NO_CONTENT
-    else:
-        return JSONResponse(
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            content=ErrorResponse.server_error("Model not loaded").to_dict(),
-        )
+    return await _ready_response(response)
+
+
+@app.get("/.well_known/ready", response_class=Response)
+async def ready_underscore(response: Response):
+    return await _ready_response(response)
 
 
 @app.get("/meta")

@@ -65,10 +65,10 @@ def test_auth_middleware_skips_health_endpoints():
         return Response("ok")
 
     middleware = AuthMiddleware(lambda scope, receive, send: None)
-    req = _make_request(path="/.well-known/live")
-
-    res = asyncio.run(middleware.dispatch(req, call_next))
-    assert res.status_code == 200
+    for path in ("/.well-known/live", "/.well_known/live"):
+        req = _make_request(path=path)
+        res = asyncio.run(middleware.dispatch(req, call_next))
+        assert res.status_code == 200
 
 
 def test_timeout_middleware():

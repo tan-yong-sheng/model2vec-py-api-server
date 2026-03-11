@@ -10,7 +10,7 @@ class SmokeTest(unittest.TestCase):
         for i in range(0, 100):
             try:
                 res = requests.get(self.url + "/.well-known/ready")
-                if res.status_code == 204:
+                if res.status_code == 200:
                     return
                 else:
                     raise Exception("status code is {}".format(res.status_code))
@@ -23,12 +23,12 @@ class SmokeTest(unittest.TestCase):
     def test_well_known_ready(self):
         res = requests.get(self.url + "/.well-known/ready")
 
-        self.assertEqual(res.status_code, 204)
+        self.assertEqual(res.status_code, 200)
 
     def test_well_known_live(self):
         res = requests.get(self.url + "/.well-known/live")
 
-        self.assertEqual(res.status_code, 204)
+        self.assertEqual(res.status_code, 200)
 
     def test_meta_unauthorized(self):
         res = requests.get(self.url + "/meta")

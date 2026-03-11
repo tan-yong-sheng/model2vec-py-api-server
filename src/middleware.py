@@ -17,8 +17,11 @@ logger = logging.getLogger("uvicorn")
 class AuthMiddleware(BaseHTTPMiddleware):
     """Centralized authentication middleware."""
 
+    _WELL_KNOWN_PREFIXES = ("/.well-known/", "/.well_known/")
+    _WELL_KNOWN_EXACT = {"/.well-known", "/.well_known"}
+
     async def dispatch(self, request: Request, call_next):
-        if request.url.path in {"/.well-known/live", "/.well-known/ready"}:
+        if self._is_well_known_path(request.url.path):
             return await call_next(request)
 
         config = get_config()
@@ -40,6 +43,12 @@ class AuthMiddleware(BaseHTTPMiddleware):
             return response
 
         return await call_next(request)
+
+    @classmethod
+    def _is_well_known_path(cls, path: str) -> bool:
+        if path in cls._WELL_KNOWN_EXACT:
+            return True
+        return path.startswith(cls._WELL_KNOWN_PREFIXES)
 
     @staticmethod
     def _extract_bearer_token(auth_header: Optional[str]) -> Optional[str]:

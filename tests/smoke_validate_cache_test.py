@@ -13,7 +13,7 @@ class SmokeTest(unittest.TestCase):
         for i in range(0, 100):
             try:
                 res = requests.get(self.url + "/.well-known/ready")
-                if res.status_code == 204:
+                if res.status_code == 200:
                     return
                 else:
                     raise Exception("status code is {}".format(res.status_code))
