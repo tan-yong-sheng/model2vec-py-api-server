@@ -1,6 +1,6 @@
 services:
   model2vec:
-    image: ghcr.io/tys203831/model2vec-py-api-server:latest
+    image: ghcr.io/tan-yong-sheng/model2vec-py-api-server:latest
     ports:
       - "8080:8080"
     environment:
