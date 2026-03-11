@@ -12,7 +12,8 @@ FROM base_image AS download_model
 
 WORKDIR /app
 
-ARG MODEL_NAME
+ARG MODEL_NAME=minishlab/potion-base-8M
+ENV MODEL_NAME=$MODEL_NAME
 COPY src/download.py .
 RUN python download.py
 
