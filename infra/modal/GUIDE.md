@@ -36,7 +36,7 @@ modal secret create model2vec-auth \
 ```
 
 ### Hugging Face token (optional)
-If set, downloads from HF are faster and less rate-limited.
+If set, downloads from HF are faster and less rate-limited. But it's not necessary because we have persisted volume of downloaded models.
 
 ```bash
 modal secret create model2vec-hf \
