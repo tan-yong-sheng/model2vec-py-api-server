@@ -5,6 +5,7 @@ from pathlib import Path
 
 import modal
 
+
 def _load_env_file(path: Path) -> None:
     if not path.is_file():
         return
@@ -14,7 +15,7 @@ def _load_env_file(path: Path) -> None:
             if not line or line.startswith("#"):
                 continue
             if line.startswith("export "):
-                line = line[len("export ") :].lstrip()
+                line = line[len("export "):].lstrip()
             if "=" not in line:
                 continue
             key, value = line.split("=", 1)
@@ -69,7 +70,8 @@ image = (
     .add_local_dir("src", remote_path="/app/src")
 )
 
-model_volume = modal.Volume.from_name(MODEL_VOLUME_NAME, create_if_missing=True)
+model_volume = modal.Volume.from_name(
+    MODEL_VOLUME_NAME, create_if_missing=True)
 
 
 def _ensure_env_defaults() -> None:
@@ -108,7 +110,8 @@ def download_models() -> None:
 
     model_name = os.environ["MODEL_NAME"]
     os.makedirs(HF_CACHE_PATH, exist_ok=True)
-    token = os.environ.get("HF_TOKEN") or os.environ.get("HUGGINGFACE_HUB_TOKEN")
+    token = os.environ.get("HF_TOKEN") or os.environ.get(
+        "HUGGINGFACE_HUB_TOKEN")
     StaticModel.from_pretrained(model_name, token=token)
     model_volume.commit()
 

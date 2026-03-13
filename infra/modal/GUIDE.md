@@ -95,3 +95,5 @@ curl -sS "$APP_URL/v1/embeddings" \
 - HF token is **optional**: it is only used by the one-time `download_models` step to speed up or allow access to gated models. It is not required for serving once the model is cached in the volume.
 - Cold starts are expected on the first embeddings request after idle.
   With memory snapshots, later cold starts are typically faster.
+- Current deployment uses `scaledown_window=60`, so containers scale to zero after 60s of idle time.
+- After deploy, the first request can be ~25-35s while the snapshot is created; subsequent cold starts are typically ~2-3s (subject to workload and cache state).
