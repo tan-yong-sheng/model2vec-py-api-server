@@ -2,6 +2,8 @@
 
 from logging import getLogger
 from contextlib import asynccontextmanager
+import asyncio
+import os
 
 from fastapi import FastAPI, Response, status
 from fastapi.exceptions import RequestValidationError
@@ -24,24 +26,50 @@ load_dotenv()
 
 logger = getLogger("uvicorn")
 
-meta_config: Meta
-config: Config
-app_state: AppState
+meta_config: Meta | None = None
+config: Config | None = None
+app_state: AppState | None = None
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
+def _resolve_model_path() -> str:
+    return os.getenv("MODEL_PATH", "./models")
+
+
+async def _initialize_app_state(model_path: str, start_idle_monitor: bool = True) -> None:
     global meta_config
     global config
     global app_state
 
+    if app_state is not None:
+        if meta_config is None:
+            meta_config = Meta(model_path)
+        if start_idle_monitor:
+            app_state.start_idle_monitor()
+        return
+
     config = Config.from_env()
     set_config(config)
-    model_path = "./models"
     app_state = await AppState.create(config, model_path)
-
     meta_config = Meta(model_path)
-    app_state.start_idle_monitor()
+    if start_idle_monitor:
+        app_state.start_idle_monitor()
+
+
+def initialize_app_state_sync(
+    model_path: str | None = None, *, start_idle_monitor: bool = True
+) -> None:
+    path = model_path or _resolve_model_path()
+    try:
+        asyncio.get_running_loop()
+    except RuntimeError:
+        asyncio.run(_initialize_app_state(path, start_idle_monitor=start_idle_monitor))
+        return
+    raise RuntimeError("initialize_app_state_sync cannot run inside a running event loop")
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await _initialize_app_state(_resolve_model_path())
 
     yield
 

@@ -1,4 +1,6 @@
-model2vec-rs-api-server/
+.env
+.env.local
+.env.modal
 
 __pycache__
 .pytest_cache
@@ -7,5 +9,3 @@ model/
 nltk_data
 .venv/
 .vscode/
-.env
-.env.local
